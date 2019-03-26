@@ -1,0 +1,9 @@
+{
+  "name": "MMM",
+  "description": "Market Making Machine for Veil",
+  "website": "",
+  "repository": "",
+  "logo": "",
+  "scripts": {},
+  "addons": ["mongolab"]
+}
