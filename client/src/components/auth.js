@@ -31,7 +31,8 @@ class auth extends Component {
     }
 
     // TODO: change this endpoint
-    fetch(`http://localhost:3000/user/${publicAddress}`)
+    // fetch(`http://localhost:3000/user/${publicAddress}`)
+    fetch(`https://test-mmm.herokuapp.com/user/${publicAddress}`)
     .then((res) => res.json())
     .then(user => user.length > 0 ? user[0] : this.handleSignup(publicAddress))
     .then(this.handleSignMessage)
@@ -39,7 +40,7 @@ class auth extends Component {
   }
 
   handleSignup = (publicAddress) => {
-    fetch(`http://localhost:3000/user/`, {
+    fetch(`https://test-mmm.herokuapp.com/user/`, {
       body: JSON.stringify({ publicAddress }),
       headers: {
         'Content-Type': 'application/json'
@@ -64,7 +65,7 @@ class auth extends Component {
   }
 
   handleAuthenticate = ({ publicAddress, signature }) => {
-    fetch(`http://localhost:3000/auth`, {
+    fetch(`https://test-mmm.herokuapp.com/auth`, {
       body: JSON.stringify({ publicAddress, signature }),
       headers: {
         'Content-Type': 'application/json'
