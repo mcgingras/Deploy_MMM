@@ -1,10 +1,17 @@
 'use strict';
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
-var Strategy = mongoose.model('Strategy');
-
-const Veil = require('veil-js');
 const dotenv = require('dotenv').config();
+var Strategy = mongoose.model('Strategy');
+const Veil = require('veil-js');
+
+
+class VeilInstance {
+  constructor(m,a,u){
+    this.veil = new Veil.default(m,a,u);
+  }
+}
+
 
 class VeilStrategy {
   // fill this out.
@@ -12,15 +19,34 @@ class VeilStrategy {
     this.veil = v;
   }
 
-  cancelOrders(market){
-    //
-  }
+  async openOrders(market, target, spread, amount){
+    // make this the most basic order
+  };
 
+  // cancels orders
+  // could make market a part of veil strategy
+  cancelOrders(market){
+    try{
+      const m = await this.veil.getMarket(market);
+      const orders = await this.veil.getUserOrders(m);
+      // prob want to check for orders first before mapping
+      orders.results.map((order) => {
+        if(order.status === 'open'){
+          this.veil.cancelOrder(order.uid);
+        }
+      })
+      return "orders canceled"
+    } catch(e) {
+      console.log("error " + e);
+      return e;
+    }
+  }
 }
 
-class VeilInstance {
-  constructor(m,a,u){
-    this.veil = new Veil.default(m,a,u);
+
+class ScalarStrategy extends VeilStrategy {
+  constructor(v){
+    super(v);
   }
 
   async openOrders(market, target, spread, amount){
@@ -39,25 +65,9 @@ class VeilInstance {
       console.log(e);
       return e;
     }
-  };
-
-  async cancelOrders(market){
-    try{
-      const m = await this.veil.getMarket(market);
-      const orders = await this.veil.getUserOrders(m);
-      // prob want to check for orders first before mapping
-      orders.results.map((order) => {
-        if(order.status === 'open'){
-          this.veil.cancelOrder(order.uid);
-        }
-      })
-      return "orders canceled"
-    } catch(e) {
-      console.log("error " + e);
-      return e;
-    }
   }
 }
+
 
 // TODO: protect these routes with a JWT or something
 exports.createStrategy = function(req, res) {

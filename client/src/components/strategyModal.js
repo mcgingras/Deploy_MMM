@@ -100,7 +100,7 @@ class strategyModal extends Component {
 
             <label>
               Target
-              <Tooltip disableFocusListener disableTouchListener title="The price you think the market should center around. Must be between 0-1.">
+              <Tooltip disableFocusListener disableTouchListener placement="right" title="The price you think the market should center around. Must be between 0-1.">
                 <span>?</span>
               </Tooltip>
             </label>
@@ -111,10 +111,11 @@ class strategyModal extends Component {
               value={this.props.strategy.target}
             />
 
-            <label>Spread</label>
-            <Tooltip disableFocusListener disableTouchListener title="How much variation in price you are willing to offer.">
+            <label>Spread
+            <Tooltip disableFocusListener disableTouchListener  placement="right" title="How much variation in price you are willing to offer.">
               <span>?</span>
             </Tooltip>
+            </label>
             <input
               type="text"
               name="spread"
@@ -122,10 +123,11 @@ class strategyModal extends Component {
               value={this.props.strategy.spread}
             />
 
-            <label>Amount</label>
-            <Tooltip disableFocusListener disableTouchListener title="How much ETH you want to stake in this market.">
+            <label>Amount
+            <Tooltip disableFocusListener disableTouchListener placement="right" title="How much ETH you want to stake in this market.">
               <span>?</span>
             </Tooltip>
+            </label>
             <input
               type="text"
               name="amount"
