@@ -21,7 +21,6 @@ class auth extends Component {
   }
 
   login = () => {
-    console.log(this.state);
     const web3 = this.state.web3;
 
     const publicAddress = web3.eth.coinbase;
@@ -31,8 +30,9 @@ class auth extends Component {
     }
 
     // TODO: change this endpoint
-    // fetch(`http://localhost:3000/user/${publicAddress}`)
-    fetch(`https://test-mmm.herokuapp.com/user/${publicAddress}`)
+    // I had to click auth twice... I think there is some issue here that we should fix.
+    fetch(`http://localhost:3000/user/${publicAddress}`)
+    // fetch(`https://test-mmm.herokuapp.com/user/${publicAddress}`)
     .then((res) => res.json())
     .then(user => user.length > 0 ? user[0] : this.handleSignup(publicAddress))
     .then(this.handleSignMessage)
@@ -40,7 +40,7 @@ class auth extends Component {
   }
 
   handleSignup = (publicAddress) => {
-    fetch(`https://test-mmm.herokuapp.com/user/`, {
+    fetch(`http://localhost:3000/user/`, {
       body: JSON.stringify({ publicAddress }),
       headers: {
         'Content-Type': 'application/json'
@@ -65,16 +65,18 @@ class auth extends Component {
   }
 
   handleAuthenticate = ({ publicAddress, signature }) => {
-    fetch(`https://test-mmm.herokuapp.com/auth`, {
+    fetch(`http://localhost:3000/auth`, {
       body: JSON.stringify({ publicAddress, signature }),
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'POST'
-    }).then(response => {
-      sessionStorage.setItem("publicAddress", publicAddress);
-      response.json();
-      this.props.login();
+    })
+  .then(response => response.json())
+  .then(token => {
+    sessionStorage.setItem("bearer", token);
+    sessionStorage.setItem("publicAddress", publicAddress);
+    this.props.login();
     });
   }
 

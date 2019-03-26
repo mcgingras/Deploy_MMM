@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Modal from '@material-ui/core/Modal';
+import Tooltip from '@material-ui/core/Tooltip';
 import Select from 'react-select';
 
 const colourStyles = {
@@ -33,7 +34,6 @@ class strategyModal extends Component {
   }
 
   componentWillMount(){
-    console.log(this.props);
     fetch('https://api.kovan.veil.market/api/v1/markets')
     .then((res) => { return res.json() })
     .then((data) => {
@@ -43,7 +43,6 @@ class strategyModal extends Component {
         return acc;
       }, []);
        this.setState({ options, markets })
-       console.log(options);
     })
   }
 
@@ -101,7 +100,9 @@ class strategyModal extends Component {
 
             <label>
               Target
-              <span>?</span>
+              <Tooltip disableFocusListener disableTouchListener title="The price you think the market should center around. Must be between 0-1.">
+                <span>?</span>
+              </Tooltip>
             </label>
             <input
               type="text"
@@ -111,6 +112,9 @@ class strategyModal extends Component {
             />
 
             <label>Spread</label>
+            <Tooltip disableFocusListener disableTouchListener title="How much variation in price you are willing to offer.">
+              <span>?</span>
+            </Tooltip>
             <input
               type="text"
               name="spread"
@@ -119,6 +123,9 @@ class strategyModal extends Component {
             />
 
             <label>Amount</label>
+            <Tooltip disableFocusListener disableTouchListener title="How much ETH you want to stake in this market.">
+              <span>?</span>
+            </Tooltip>
             <input
               type="text"
               name="amount"

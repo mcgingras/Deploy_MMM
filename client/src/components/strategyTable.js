@@ -59,6 +59,7 @@ class strategyTable extends Component {
   }
 
   componentWillMount(){
+    console.log(sessionStorage.getItem('publicAddress'));
     fetch(`http://localhost:3000/strategy/user/${sessionStorage.getItem('publicAddress')}`)
     .then((res) => res.json())
     .then((strategies) => this.setState({strategies}));

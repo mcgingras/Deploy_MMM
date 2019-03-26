@@ -1,9 +1,22 @@
 'use strict';
 var mongoose = require('mongoose');
+var jwt = require('jsonwebtoken');
 var Strategy = mongoose.model('Strategy');
 
 const Veil = require('veil-js');
 const dotenv = require('dotenv').config();
+
+class VeilStrategy {
+  // fill this out.
+  constructor(v){
+    this.veil = v;
+  }
+
+  cancelOrders(market){
+    //
+  }
+
+}
 
 class VeilInstance {
   constructor(m,a,u){
@@ -64,6 +77,16 @@ exports.createStrategy = function(req, res) {
   //   await v.openOrders(market,target,spread,amount);
   // }
   // run();
+  if (!req.get('Authorization')){
+    res.send("no bearer token sent!");
+  }
+
+  const bearer = req.get('Authorization');
+  try {
+    var decoded = jwt.verify(bearer, 'secret');
+  } catch(err) {
+    res.send(err);
+  }
 
   var new_strategy  = new Strategy(req.body);
   new_strategy.save(function(err, strategy) {

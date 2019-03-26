@@ -39,6 +39,7 @@ class App extends Component {
     fetch('http://localhost:3000/strategy', {
       body: JSON.stringify(payload),
       headers: {
+        'Authorization': sessionStorage.getItem('bearer'),
         'Content-Type': 'application/json'
       },
       method: 'POST'

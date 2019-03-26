@@ -20,7 +20,6 @@ class marketList extends Component {
     .then((res) => { return res.json() })
     .then((data) => {
        this.setState({ markets: data.data.results})
-       console.log(data.data.results);
     })
   }
 

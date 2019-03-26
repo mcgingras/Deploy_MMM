@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var ethUtil = require('ethereumjs-util');
+var jwt = require('jsonwebtoken');
 var User = mongoose.model('User');
 
 
@@ -39,10 +40,8 @@ exports.auth = function(req,res) {
     const address = ethUtil.bufferToHex(addressBuffer);
 
     if (address.toLowerCase() === req.body.publicAddress.toLowerCase()) {
-      return res.json(user[0]);
-
-      // UPDATE THE NONCE!
-      // DO SOMETHING WITH JWT?
+      const token = jwt.sign({ test: 'test' }, 'secret');
+      return res.json(token);
     } else {
       return res
         .status(401)
