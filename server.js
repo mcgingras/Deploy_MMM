@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var cors = require('cors')
+const path = require("path")
 var bodyParser = require('body-parser');
 require("dotenv").config()
 
@@ -29,4 +30,4 @@ app.get("*", (req, res) => {
 
 app.listen(port);
 
-console.log('todo list RESTful API server started on: ' + port);
+console.log('Veil MMM started on: ' + port);
