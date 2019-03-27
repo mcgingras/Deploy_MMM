@@ -1,10 +1,25 @@
 # MMM_
-market maker machine
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/mcgingras/Deploy_MMM)
 
-A UI for creating and managing market making strategies on top of Veil.
+The Market Making Machine is a A UI for creating and managing market making strategies on top of Veil.
 
-Deploy to Heroku.
+### Instructions
+Simply click the 'deploy to heroku' button to spin up an instance of the Market Making Machine.
 
-Instructions to come.
+- Spread
+- Amount
+- Target
+
+### Strategies
+
+###### Simple
+Simple strategy places a spread around the given target.
+
+###### EMA
+Exponential moving average.
+
+###### LSMR
+:0
+
+###### Other

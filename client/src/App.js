@@ -5,6 +5,7 @@ import Auth from './components/auth';
 import Header from './components/header';
 import StrategyTable from './components/strategyTable';
 import StrategyModal from './components/strategyModal';
+const dotenv = require('dotenv').config();
 
 class App extends Component {
   constructor(props){
@@ -36,7 +37,7 @@ class App extends Component {
     payload.publicAddress = sessionStorage.getItem('publicAddress');
 
     // going to need JWT as well... should be protected
-    fetch('http://localhost:3000/strategy', {
+    fetch(process.env.REACT_APP_PROD_URL+'/strategy', {
       body: JSON.stringify(payload),
       headers: {
         'Authorization': sessionStorage.getItem('bearer'),
@@ -78,6 +79,7 @@ class App extends Component {
         active: toggle
       }),
       headers: {
+        'Authorization': sessionStorage.getItem('bearer'),
         'Content-Type': 'application/json'
       },
       method: 'PUT'
@@ -104,6 +106,7 @@ class App extends Component {
     fetch(`http://localhost:3000/strategy/${id}`, {
       body: JSON.stringify(strategy),
       headers: {
+        'Authorization': sessionStorage.getItem('bearer'),
         'Content-Type': 'application/json'
       },
       method: 'PUT'

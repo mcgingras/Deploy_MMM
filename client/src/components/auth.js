@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
+const dotenv = require('dotenv').config();
 
 class auth extends Component {
   constructor(props) {
@@ -31,8 +32,8 @@ class auth extends Component {
 
     // TODO: change this endpoint
     // I had to click auth twice... I think there is some issue here that we should fix.
-    fetch(`http://localhost:3000/user/${publicAddress}`)
-    // fetch(`https://test-mmm.herokuapp.com/user/${publicAddress}`)
+    // fetch(`http://localhost:3000/user/${publicAddress}`)
+    fetch(process.env.REACT_APP_PROD_URL + "/" + publicAddress)
     .then((res) => res.json())
     .then(user => user.length > 0 ? user[0] : this.handleSignup(publicAddress))
     .then(this.handleSignMessage)
