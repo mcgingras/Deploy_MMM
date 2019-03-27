@@ -1,9 +1,22 @@
 {
   "name": "MMM",
   "description": "Market Making Machine for Veil",
-  "website": "",
-  "repository": "",
+  "website": "veil.co",
+  "repository": "https://github.com/mcgingras/Deploy_MMM",
   "logo": "",
   "scripts": {},
-  "addons": ["mongolab"]
+  "addons": ["mongolab"],
+  "env": {
+    "MNEMONIC": {
+      "description": "Your ethereum wallet's mnumonic",
+      "value": ""
+    },
+    "ADDRESS": {
+            "description": "Your ethereum wallet's address",
+            "value": ""
+    },
+    "API_URL": {
+      "description": "Which Veil instance? Mainnet or Kovan?",
+      "value": "veil.co"
+    }
 }
