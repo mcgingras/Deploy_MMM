@@ -1,11 +1,9 @@
 {
   "name": "MMM",
   "description": "Market Making Machine for Veil",
-  "website": "https://veil.co",
   "repository": "https://github.com/mcgingras/Deploy_MMM",
   "logo": "https://veil.co/static/logo-blue.png",
   "scripts": {
-    "release": "node loadenv.js"
   },
   "addons": ["mongolab"],
   "env": {
