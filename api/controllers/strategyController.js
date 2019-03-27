@@ -1,9 +1,9 @@
 'use strict';
-const mongoose         = require('mongoose');
-const dotenv           = require('dotenv').config();
-const { isAuth }       = require('../helpers/auth');
-const { VeilStrategy } = require('../veil/veil');
-const Strategy         = mongoose.model('Strategy');
+const mongoose = require('mongoose');
+const dotenv  = require('dotenv').config();
+const { isAuth } = require('../helpers/auth');
+const { VeilStrategy, SimpleBinaryStrategy } = require('../veil/veil');
+const Strategy = mongoose.model('Strategy');
 
 
 exports.createStrategy = function(req, res) {
@@ -11,16 +11,19 @@ exports.createStrategy = function(req, res) {
     return res.send("Not Authorized");
   }
 
+  const { market } = req.body;
+  const s = new SimpleBinaryStrategy(market);
+
   // do we require target to be between 0 and 1?
-  // const { market } = req.body;
-  // const target = parseFloat(req.body.target);
-  // const spread = parseFloat(req.body.spread);
-  // const amount = parseFloat(req.body.amount);
+
+  const target = parseFloat(req.body.target);
+  const spread = parseFloat(req.body.spread);
+  const amount = parseFloat(req.body.amount);
   //
-  // async function run(){
-  //   await v.openOrders(market,target,spread,amount);
-  // }
-  // run();
+  async function run(){
+    await s.openOrders(target,spread,amount);
+  }
+  run();
 
   var new_strategy  = new Strategy(req.body);
   new_strategy.save(function(err, strategy) {

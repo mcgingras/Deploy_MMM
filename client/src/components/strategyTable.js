@@ -6,8 +6,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import triangle from '../img/triangle.svg';
-import square from '../img/square.svg';
+import triangleImg from '../img/triangle.svg';
+import squareImg from '../img/square.svg';
+import linkImg from '../img/link.svg';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -92,7 +93,12 @@ class strategyTable extends Component {
                   <div>
                       <div className="container--flex">
                         <span className="tag tag--purple">{n.channel.toUpperCase()}</span>
-                        <a onClick={() => {window.open('https://kovan.veil.co/market/'+n.market)}} className="market--link">View Market</a>
+                        <a
+                          onClick={() => {window.open('https://kovan.veil.co/market/'+n.market)}}
+                          className="market--link">
+                          View Market
+                          <img src={linkImg}/>
+                        </a>
                       </div>
                       <p className="market--title">{n.name}</p>
                   </div>
@@ -105,8 +111,18 @@ class strategyTable extends Component {
                 <CustomTableCell className={this.props.classes.cell}>
                   <button onClick={() => this.props.editStrategy(n)} className="button button-grey">Edit</button>
                   {n.active
-                    ? <button onClick={() => this.props.toggleStrategy(n, false)} className="button button-red"><img src={square}/>Stop</button>
-                    : <button onClick={() => this.props.toggleStrategy(n, true)} className="button button-purple"><img src={triangle}/>Restart</button>
+                    ? <button
+                        onClick={() => this.props.toggleStrategy(n, false)}
+                        className="button button-red">
+                        <img src={squareImg} alt="square"/>
+                        Stop
+                      </button>
+                    : <button
+                        onClick={() => this.props.toggleStrategy(n, true)}
+                        className="button button-purple">
+                        <img src={triangleImg} alt="square"/>
+                        Restart
+                      </button>
                   }
 
                 </CustomTableCell>

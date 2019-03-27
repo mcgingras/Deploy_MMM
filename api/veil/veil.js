@@ -4,12 +4,12 @@ const dotenv = require('dotenv').config();
 
 class VeilStrategy {
   // fill this out.
-  constructor(m){
+  constructor(market){
     const m = process.env.MNEMONIC;
     const a = process.env.ADDRESS;
     const u = process.env.API_URL;
     this.veil = new Veil.default(m,a,u);
-    this.market = m;
+    this.market = market;
   }
 
   async openOrders(market, target, spread, amount){
@@ -18,10 +18,10 @@ class VeilStrategy {
 
   // cancels orders
   // could make market a part of veil strategy
-  async cancelOrders(market){
+  async cancelOrders(){
     try{
-      const m = await this.veil.getMarket(market);
-      const orders = await this.veil.getUserOrders(m);
+      const market = await this.veil.getMarket(this.market);
+      const orders = await this.veil.getUserOrders(market);
       // prob want to check for orders first before mapping
       orders.results.map((order) => {
         if(order.status === 'open'){
@@ -37,19 +37,19 @@ class VeilStrategy {
 }
 
 class SimpleBinaryStrategy extends VeilStrategy {
-  constructor(v,m){
-    super(v,m);
+  constructor(m){
+    super(m);
   }
 
-  async openOrders(market, target, spread, amount){
+  async openOrders(target, spread, amount){
     const halfSpread = spread / 2;
     const bidPrice = target - halfSpread;
     const askPrice = target + halfSpread;
-    const m = await this.veil.getMarket(market);
+    const market = await this.veil.getMarket(this.market);
 
     try {
-      const longQuote  = await this.veil.createQuote(m, "buy", "long", amount, bidPrice);
-      const shortQuote = await this.veil.createQuote(m, "buy", "short", amount, 1-askPrice);
+      const longQuote  = await this.veil.createQuote(market, "buy", "long", amount, bidPrice);
+      const shortQuote = await this.veil.createQuote(market, "buy", "short", amount, 1-askPrice);
       const longOrder = await this.veil.createOrder(longQuote, { postOnly: true });
       const shortOrder = await this.veil.createOrder(shortQuote, { postOnly: true });
       return "created successfully"
