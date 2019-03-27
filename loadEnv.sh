@@ -1,0 +1,1 @@
+cp .env ./client/.env

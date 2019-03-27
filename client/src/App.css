@@ -136,6 +136,10 @@ a{
   color: #DADADA;
 }
 
+.market--link:hover{
+  opacity: .85;
+}
+
 .table{
   background-color: #19191C;
   border-radius: 5px;

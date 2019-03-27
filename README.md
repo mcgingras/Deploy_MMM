@@ -13,13 +13,19 @@ Simply click the 'deploy to heroku' button to spin up an instance of the Market 
 
 ### Strategies
 
-###### Simple
+##### Simple
 Simple strategy places a spread around the given target.
 
-###### EMA
+##### EMA
 Exponential moving average.
 
-###### LSMR
+##### LSMR
 :0
 
-###### Other
+##### Other
+
+## Todo:
+- Check when markets expire. Sometimes market will expire and then editing strategy shows no market, because it is no longer in the list. Do we want to expire the entire market? Or what?
+- Show position (do we want to create a class for orders?)
+- Improve error message handling
+- Improve other strategies
