@@ -12,11 +12,11 @@
   "env": {
     "MNEMONIC": {
       "description": "Your ethereum wallet's mnumonic",
-      "required": true,
+      "required": "true"
     },
     "ADDRESS": {
       "description": "Your ethereum wallet's address",
-      "required": true
+      "required": "true"
     },
     "API_URL": {
       "description": "Which Veil instance? Mainnet or Kovan?",
