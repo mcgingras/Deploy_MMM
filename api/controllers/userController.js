@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var ethUtil = require('ethereumjs-util');
 var jwt = require('jsonwebtoken');
 var User = mongoose.model('User');
+const dotenv = require('dotenv').config();
 
 
 exports.createUser  = function(req, res) {
@@ -40,7 +41,7 @@ exports.auth = function(req,res) {
     const address = ethUtil.bufferToHex(addressBuffer);
 
     if (address.toLowerCase() === req.body.publicAddress.toLowerCase()) {
-      const token = jwt.sign({ test: 'test' }, 'secret');
+      const token = jwt.sign({ test: 'test' }, process.env.SECRET); // change this test stuff
       return res.json(token);
     } else {
       return res

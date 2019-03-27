@@ -33,7 +33,7 @@ class auth extends Component {
     // TODO: change this endpoint
     // I had to click auth twice... I think there is some issue here that we should fix.
     // fetch(`http://localhost:3000/user/${publicAddress}`)
-    fetch(process.env.REACT_APP_PROD_URL + "/" + publicAddress)
+    fetch(process.env.REACT_APP_PROD_URL + "/user/" + publicAddress)
     .then((res) => res.json())
     .then(user => user.length > 0 ? user[0] : this.handleSignup(publicAddress))
     .then(this.handleSignMessage)

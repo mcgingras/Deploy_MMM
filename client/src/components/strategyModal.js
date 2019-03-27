@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Modal from '@material-ui/core/Modal';
 import Tooltip from '@material-ui/core/Tooltip';
+import questionImg from '../img/question.svg';
 import Select from 'react-select';
 
 const colourStyles = {
@@ -101,7 +102,7 @@ class strategyModal extends Component {
             <label>
               Target
               <Tooltip disableFocusListener disableTouchListener placement="right" title="The price you think the market should center around. Must be between 0-1.">
-                <span>?</span>
+                <img src={questionImg} alt="tooltip"/>
               </Tooltip>
             </label>
             <input
@@ -113,7 +114,7 @@ class strategyModal extends Component {
 
             <label>Spread
             <Tooltip disableFocusListener disableTouchListener  placement="right" title="How much variation in price you are willing to offer.">
-              <span>?</span>
+              <img src={questionImg} alt="tooltip"/>
             </Tooltip>
             </label>
             <input
@@ -125,7 +126,7 @@ class strategyModal extends Component {
 
             <label>Amount
             <Tooltip disableFocusListener disableTouchListener placement="right" title="How much ETH you want to stake in this market.">
-              <span>?</span>
+              <img src={questionImg} alt="tooltip"/>
             </Tooltip>
             </label>
             <input

@@ -1,15 +1,14 @@
-const Veil = require('veil-js');
+const Veil   = require('veil-js');
+const dotenv = require('dotenv').config();
 
-class VeilInstance {
-  constructor(m,a,u){
-    this.veil = new Veil.default(m,a,u);
-  }
-}
 
 class VeilStrategy {
   // fill this out.
-  constructor(v,m){
-    this.veil = v;
+  constructor(m){
+    const m = process.env.MNEMONIC;
+    const a = process.env.ADDRESS;
+    const u = process.env.API_URL;
+    this.veil = new Veil.default(m,a,u);
     this.market = m;
   }
 
@@ -79,7 +78,6 @@ class LMBinaryStrategy extends VeilStrategy {
 }
 
 module.exports = {
-  VeilInstance: VeilInstance,
   VeilStrategy: VeilStrategy,
   SimpleBinaryStrategy: SimpleBinaryStrategy,
   EMABinaryStrategy: EMABinaryStrategy,
