@@ -5,7 +5,7 @@
   "repository": "https://github.com/mcgingras/Deploy_MMM",
   "logo": "https://veil.co/static/logo-blue.png",
   "scripts": {
-    "release": ".bash /loadEnv.sh",
+    "release": ".bash /loadEnv.sh"
   },
   "addons": ["mongolab"],
   "env": {
