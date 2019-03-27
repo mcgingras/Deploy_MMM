@@ -17,7 +17,7 @@
     },
     "API_URL": {
       "description": "Which Veil instance? Mainnet or Kovan?",
-      "value": "veil.co"
+      "value": "https://api.kovan.veil.co"
     }
   }
 }

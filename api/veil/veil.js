@@ -37,8 +37,8 @@ class VeilStrategy {
 }
 
 class SimpleBinaryStrategy extends VeilStrategy {
-  constructor(m){
-    super(m);
+  constructor(market){
+    super(market);
   }
 
   async openOrders(target, spread, amount){
@@ -62,18 +62,18 @@ class SimpleBinaryStrategy extends VeilStrategy {
 
 
 class EMABinaryStrategy extends VeilStrategy {
-  constructor(v,m){
-    super(v,m);
+  constructor(market){
+    super(market);
   }
 
-  async openOrders(market, target, spread, amount){
+  async openOrders(target, spread, amount){
     // pass
   }
 }
 
 class LMBinaryStrategy extends VeilStrategy {
-  constructor(v,m){
-    super(v,m);
+  constructor(market){
+    super(market);
   }
 }
 

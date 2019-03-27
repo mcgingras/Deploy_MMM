@@ -1,11 +1,16 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var ethUtil = require('ethereumjs-util');
-var jwt = require('jsonwebtoken');
-var User = mongoose.model('User');
+const mongoose = require('mongoose');
+const ethUtil = require('ethereumjs-util');
+const jwt = require('jsonwebtoken');
+const { getEnv } = require('../helpers/env');
 const dotenv = require('dotenv').config();
+const User = mongoose.model('User');
 
+exports.getEnv = function(req, res) {
+  console.log(getEnv(req.body.q));
+  return res.send("okay")
+}
 
 exports.createUser  = function(req, res) {
   var new_user  = new User(req.body);
