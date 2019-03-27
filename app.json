@@ -1,9 +1,9 @@
 {
   "name": "MMM",
   "description": "Market Making Machine for Veil",
-  "website": "veil.co",
+  "website": "https://veil.co",
   "repository": "https://github.com/mcgingras/Deploy_MMM",
-  "logo": "",
+  "logo": "https://veil.co/static/logo-blue.png",
   "scripts": {},
   "addons": ["mongolab"],
   "env": {
@@ -19,4 +19,5 @@
       "description": "Which Veil instance? Mainnet or Kovan?",
       "value": "veil.co"
     }
+  }
 }
