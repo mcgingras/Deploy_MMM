@@ -22,6 +22,6 @@
     "SECRET": {
       "description": "A secret key for authorizing endpoints.",
       "generator": "secret"
-    },
+    }
   }
 }
