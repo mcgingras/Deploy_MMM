@@ -17,5 +17,4 @@ exports.isAuth = (req) => {
     console.log(err);
     return false;
   }
-
 }
