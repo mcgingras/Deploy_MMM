@@ -55,15 +55,69 @@ class strategyTable extends Component {
     this.state = {
       web3: null,
       strategies: [],
+      orders: {},
     }
+
+    this.getOrders = this.getOrders.bind(this);
 
   }
 
   componentWillMount(){
-    console.log(sessionStorage.getItem('publicAddress'));
     fetch(window.location.href + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
     .then((res) => res.json())
-    .then((strategies) => this.setState({strategies}));
+    .then((strategies) => {
+        this.setState({strategies});
+        strategies.map((s) => {
+          this.getOrders(s.market);
+        })
+      }
+    );
+  }
+
+  // not a big fan of the way this is rendering right now... feels hacky
+  // couldnt figure out how to return directly from the fetch.
+  renderOrders(market){
+    if(market in this.state.orders){
+      return (
+        <div>
+          <p>{this.state.orders[market].short} No</p>
+          <p>{this.state.orders[market].long} Yes</p>
+        </div>
+      )
+    }
+  }
+
+  getOrders(market){
+    fetch(window.location.href + 'orders',{
+        body: JSON.stringify({market}),
+        headers: {
+          'Authorization': sessionStorage.getItem('bearer'),
+          'Content-Type': 'application/json'
+        },
+        method: 'POST'
+      })
+      .then((res => res.json()))
+      .then((orders) => {
+        const orderTally = orders.results.reduce((acc, o) => {
+          if(o.status === "open"){
+            if(o.tokenType === "short"){
+              acc.short += 1;
+            }
+            else if(o.tokenType === "long"){
+              acc.long +=1;
+            }
+          }
+          return acc;
+        }, {short: 0, long: 0})
+
+        this.setState((prevState) => ({
+          ...prevState,
+          orders: {
+            ...prevState.orders,
+            [market]: orderTally
+          }
+        }))
+      })
   }
 
   render(){
@@ -107,7 +161,7 @@ class strategyTable extends Component {
                 <TableCell className={this.props.classes.cell}>{n.target}%</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.spread}%</TableCell>
                 <CustomTableCell className={this.props.classes.cell}><span>{`${n.amount} ETH`}</span></CustomTableCell>
-                <TableCell className={this.props.classes.cell}>null</TableCell>
+                <TableCell className={this.props.classes.cell}>{this.renderOrders(n.market)}</TableCell>
                 <CustomTableCell className={this.props.classes.cell}>
                   <button onClick={() => this.props.editStrategy(n)} className="button button-grey">Edit</button>
                   {n.active

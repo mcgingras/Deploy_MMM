@@ -64,3 +64,14 @@ exports.getUserStrategies = function(req, res) {
     return res.json(strategy);
   });
 };
+
+exports.getUserOrders = async function(req, res) {
+  // if(!isAuth(req)){
+  //   return res.send("Not Authorized");
+  // }
+
+  const { market } = req.body;
+  const v = new VeilStrategy(market);
+  const response = await v.getOrders(market);
+  return res.json(response);
+}

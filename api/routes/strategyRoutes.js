@@ -11,4 +11,8 @@ module.exports = function(app) {
   app.route('/strategy/:strategyId')
     .get(strategy.getStrategy)
     .put(strategy.updateStrategy);
+
+  app.route('/orders/')
+    .post(strategy.getUserOrders);
+
 };

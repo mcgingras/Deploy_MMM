@@ -36,6 +36,16 @@ var StrategySchema = new Schema({
   channel: {
     type: String,
     required: true,
+  },
+  shortTokens: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  longTokens: {
+    type: Number,
+    required: true,
+    default: 0,
   }
 });
 

@@ -12,7 +12,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      isAuth: false,
+      isAuth: true,
       isOpen: false,
       isEdit: false,
       strategy: {

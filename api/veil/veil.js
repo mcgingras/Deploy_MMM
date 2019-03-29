@@ -34,6 +34,18 @@ class VeilStrategy {
       return e;
     }
   }
+
+  async getOrders(){
+    try{
+      const market = await this.veil.getMarket(this.market);
+      const orders = await this.veil.getUserOrders(market);
+      console.log(orders);
+      return orders;
+    } catch(e) {
+      console.log("error " + e);
+      return e;
+    }
+  }
 }
 
 class SimpleBinaryStrategy extends VeilStrategy {
