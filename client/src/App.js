@@ -122,8 +122,6 @@ class App extends Component {
 
   onInputChange = (e) => {
     const {name, value} = e.target;
-    console.log(this.state.strategy);
-
     this.setState((prevState) => ({
       ...prevState,
       strategy: {

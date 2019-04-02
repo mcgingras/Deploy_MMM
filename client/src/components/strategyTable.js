@@ -56,6 +56,7 @@ class strategyTable extends Component {
       web3: null,
       strategies: [],
       orders: {},
+      lastTrade: {}
     }
 
     this.getOrders = this.getOrders.bind(this);
@@ -80,8 +81,8 @@ class strategyTable extends Component {
     if(market in this.state.orders){
       return (
         <div>
-          <p>{this.state.orders[market].short} No</p>
-          <p>{this.state.orders[market].long} Yes</p>
+          <p>{this.state.orders[market].short} Short</p>
+          <p>{this.state.orders[market].long} Long</p>
         </div>
       )
     }
@@ -98,14 +99,21 @@ class strategyTable extends Component {
       })
       .then((res => res.json()))
       .then((orders) => {
+        console.log(orders);
         const orderTally = orders.results.reduce((acc, o) => {
           if(o.status === "open"){
-            if(o.tokenType === "short"){
-              acc.short += 1;
+            if(o.fills.length > 0){
+              const fills = o.fills;
+              fills.map((fill) => {
+                acc[o.tokenType] += fill.tokenAmount;
+              })
             }
-            else if(o.tokenType === "long"){
-              acc.long +=1;
-            }
+            // if(o.tokenType === "short"){
+            //   acc.short += 1;
+            // }
+            // else if(o.tokenType === "long"){
+            //   acc.long +=1;
+            // }
           }
           return acc;
         }, {short: 0, long: 0})
@@ -157,7 +165,7 @@ class strategyTable extends Component {
                       <p className="market--title">{n.name}</p>
                   </div>
                 </TableCell>
-                <TableCell className={this.props.classes.cell}>null</TableCell>
+                <TableCell className={this.props.classes.cell}>N/A</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.target}%</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.spread}%</TableCell>
                 <CustomTableCell className={this.props.classes.cell}><span>{`${n.amount} ETH`}</span></CustomTableCell>

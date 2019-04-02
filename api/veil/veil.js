@@ -39,7 +39,8 @@ class VeilStrategy {
     try{
       const market = await this.veil.getMarket(this.market);
       const orders = await this.veil.getUserOrders(market);
-      console.log(orders);
+      const fills = await this.veil.getOrderFills(market, "short");
+      console.log(fills);
       return orders;
     } catch(e) {
       console.log("error " + e);
