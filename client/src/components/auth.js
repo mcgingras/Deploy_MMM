@@ -14,7 +14,6 @@ class auth extends Component {
   }
 
   componentDidMount() {
-    console.log(window.location.href);
     const web3 = window.web3 ?
     new Web3(window.web3.currentProvider) :
     new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/"));
@@ -34,7 +33,7 @@ class auth extends Component {
     // TODO: change this endpoint
     // I had to click auth twice... I think there is some issue here that we should fix.
     // fetch(`http://localhost:3000/user/${publicAddress}`)
-    fetch(window.location.href + "user/" + publicAddress)
+    fetch(process.env.REACT_APP_PROD_URL + "user/" + publicAddress)
     .then((res) => res.json())
     .then(user => user.length > 0 ? user[0] : this.handleSignup(publicAddress))
     .then(this.handleSignMessage)
@@ -42,7 +41,7 @@ class auth extends Component {
   }
 
   handleSignup = (publicAddress) => {
-    fetch(window.location.href + "user/", {
+    fetch(process.env.REACT_APP_PROD_URL + "user/", {
       body: JSON.stringify({ publicAddress }),
       headers: {
         'Content-Type': 'application/json'
@@ -67,7 +66,7 @@ class auth extends Component {
   }
 
   handleAuthenticate = ({ publicAddress, signature }) => {
-    fetch(window.location.href + "auth", {
+    fetch(process.env.REACT_APP_PROD_URL + "auth", {
       body: JSON.stringify({ publicAddress, signature }),
       headers: {
         'Content-Type': 'application/json'

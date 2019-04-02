@@ -22,12 +22,15 @@ app.use(cors());
 var routes = require('./api/routes/index');
 routes(app);
 
-app.use(express.static(path.join(__dirname, "client", "build")))
+console.log(process.env.NODE_ENV);
 
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
+if (process.env.NODE_ENV == "production"){
+  app.use(express.static(path.join(__dirname, "client", "build")))
 
+  app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 app.listen(port);
 
 console.log('Veil MMM started on: ' + port);

@@ -37,7 +37,7 @@ class App extends Component {
     payload.publicAddress = sessionStorage.getItem('publicAddress');
 
     // going to need JWT as well... should be protected
-    fetch(window.location.href + 'strategy', {
+    fetch(process.env.REACT_APP_PROD_URL + 'strategy', {
       body: JSON.stringify(payload),
       headers: {
         'Authorization': sessionStorage.getItem('bearer'),
@@ -73,7 +73,7 @@ class App extends Component {
 
   toggleStrategy = (strategy, toggle) => {
     const id = strategy._id;
-    fetch(window.location.href + `strategy/${id}`, {
+    fetch(process.env.REACT_APP_PROD_URL + `strategy/${id}`, {
       body: JSON.stringify({
         ...strategy,
         active: toggle
@@ -103,7 +103,7 @@ class App extends Component {
     delete strategy._id;
     delete strategy.__v;
 
-    fetch(window.location.href + `strategy/${id}`, {
+    fetch(process.env.REACT_APP_PROD_URL + `strategy/${id}`, {
       body: JSON.stringify(strategy),
       headers: {
         'Authorization': sessionStorage.getItem('bearer'),

@@ -64,7 +64,7 @@ class strategyTable extends Component {
   }
 
   componentWillMount(){
-    fetch(window.location.href + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
+    fetch(process.env.REACT_APP_PROD_URL + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
     .then((res) => res.json())
     .then((strategies) => {
         this.setState({strategies});
@@ -89,7 +89,7 @@ class strategyTable extends Component {
   }
 
   getOrders(market){
-    fetch(window.location.href + 'orders',{
+    fetch(process.env.REACT_APP_PROD_URL + 'orders',{
         body: JSON.stringify({market}),
         headers: {
           'Authorization': sessionStorage.getItem('bearer'),
