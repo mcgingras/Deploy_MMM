@@ -23,16 +23,12 @@ class auth extends Component {
 
   login = () => {
     const web3 = this.state.web3;
-
     const publicAddress = web3.eth.coinbase;
     if(publicAddress == null){
       this.setState({errors: [{message: "Not web3 connection. Please log into metamask."}]});
       return;
     }
 
-    // TODO: change this endpoint
-    // I had to click auth twice... I think there is some issue here that we should fix.
-    // fetch(`http://localhost:3000/user/${publicAddress}`)
     fetch(process.env.REACT_APP_PROD_URL + "user/" + publicAddress)
     .then((res) => res.json())
     .then(user => user.length > 0 ? user[0] : this.handleSignup(publicAddress))
@@ -41,6 +37,7 @@ class auth extends Component {
   }
 
   handleSignup = (publicAddress) => {
+    return(
     fetch(process.env.REACT_APP_PROD_URL + "user/", {
       body: JSON.stringify({ publicAddress }),
       headers: {
@@ -48,7 +45,8 @@ class auth extends Component {
       },
       method: 'POST'
     })
-    .then(res => res.json());
+    .then(res => res.json())
+    )
   };
 
   handleSignMessage = ({ publicAddress, nonce }) => {

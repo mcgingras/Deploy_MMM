@@ -39,6 +39,7 @@ const styles = theme => ({
     color: '#FFFFFF',
     borderBottom: '1px solid #343434',
     fontSize: '18px',
+    backgroundColor: '#19191C',
     // whiteSpace: 'nowrap',
     // overflow: 'hidden'
   },
@@ -108,12 +109,6 @@ class strategyTable extends Component {
                 acc[o.tokenType] += fill.tokenAmount;
               })
             }
-            // if(o.tokenType === "short"){
-            //   acc.short += 1;
-            // }
-            // else if(o.tokenType === "long"){
-            //   acc.long +=1;
-            // }
           }
           return acc;
         }, {short: 0, long: 0})
@@ -145,10 +140,12 @@ class strategyTable extends Component {
           </TableRow>
         </TableHead>
         <TableBody>
-          {this.state.strategies.map(n => {
+          {this.state.strategies.length > 0
+            ?
+            this.state.strategies.map(n => {
             return (
               <TableRow key={n.id} className={this.props.classes.row}>
-                <TableCell className={this.props.classes.cell}>
+                <TableCell className={this.props.classes.cell} align="right">
                   <div className={n.active ? 'market--toggle market--toggle-active': 'market--toggle market--toggle-inactive'}></div>
                 </TableCell>
                 <TableCell scope="row" className={this.props.classes.cell}>
@@ -190,7 +187,14 @@ class strategyTable extends Component {
                 </CustomTableCell>
               </TableRow>
             );
-          })}
+          })
+          :
+          <TableRow>
+            <TableCell colSpan={8} className={this.props.classes.cell} align="center">
+                <div className="empty-state">No strategies implemented. Click above to add!</div>
+            </TableCell>
+        </TableRow>
+        }
         </TableBody>
       </Table>
       </div>

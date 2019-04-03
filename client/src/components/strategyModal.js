@@ -40,7 +40,9 @@ class strategyModal extends Component {
     .then((data) => {
       const markets = data.data.results;
       const options = markets.reduce((acc, market) => {
-        acc.push({label: market.name, value: market.slug, isDisabled: false});
+        if(market.type === "yesno"){
+          acc.push({label: market.name, value: market.slug, isDisabled: false});
+        }
         return acc;
       }, []);
        this.setState({ options, markets })
@@ -137,10 +139,10 @@ class strategyModal extends Component {
             />
 
             <div className="container--button">
-              <button onClick={() => this.props.closeModal()} className="button-red">Cancel</button>
+              <button onClick={() => this.props.closeModal()} className="button button-red">Cancel</button>
               {this.props.isEdit
-               ? <button className="button-purple">Update Strategy</button>
-               : <button className="button-purple">Start Strategy</button>
+               ? <button className="button button-purple">Update Strategy</button>
+               : <button className="button button-purple">Start Strategy</button>
               }
             </div>
           </form>

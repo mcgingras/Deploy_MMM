@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Auth from './components/auth';
+import About from './components/about';
 import Header from './components/header';
 import StrategyTable from './components/strategyTable';
 import StrategyModal from './components/strategyModal';
@@ -12,7 +13,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      isAuth: true,
+      isAuth: false,
       isOpen: false,
       isEdit: false,
       strategy: {

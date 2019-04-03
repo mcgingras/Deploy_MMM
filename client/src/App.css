@@ -225,3 +225,8 @@ h1{
 
 .market--toggle-active{ background-color: #36F2C5 }
 .market--toggle-inactive{ background-color: #FF4500 }
+
+.empty-state{
+  height: 150px;
+  line-height: 150px;
+}
