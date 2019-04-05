@@ -37,14 +37,22 @@ exports.updateStrategy = async function(req, res) {
   if(!isAuth(req)){
     return res.send("Not Authorized");
   }
-
-  const { market } = req.body;
-  const v = new VeilStrategy(market);
+  
+  const { market, active } = req.body;
+  const v = new SimpleBinaryStrategy(market);
   const response = await v.cancelOrders(market);
-  // IF RESPONSE IS GOOD
-  Strategy.findOneAndUpdate({_id: req.params.strategyId}, req.body, function(err, strategy) {
+
+  if(active){ // if updating an active market we want to place orders again
+    const t = parseFloat(req.body.target);
+    const s = parseFloat(req.body.spread);
+    const a = parseFloat(req.body.amount);
+    v.openOrders(t,s,a);
+  }
+
+  Strategy.findOneAndUpdate({_id: req.params.strategyId}, req.body, {new:true}, function(err, strategy) {
     if (err)
       return res.send(err);
+    console.log(strategy);
     return res.json(strategy);
   });
 }

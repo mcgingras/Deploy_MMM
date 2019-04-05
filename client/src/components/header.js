@@ -13,7 +13,7 @@ const Header = (props) => {
       </div>
 
       <div className="header--item">
-        <p>All Strategies</p>
+        <p>About MMM</p>
         <button
           className="button--add"
           onClick={() => props.onAddStrategy()}>

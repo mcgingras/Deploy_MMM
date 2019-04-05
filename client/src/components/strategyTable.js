@@ -55,73 +55,24 @@ class strategyTable extends Component {
 
     this.state = {
       web3: null,
-      strategies: [],
-      orders: {},
       lastTrade: {}
     }
-
-    this.getOrders = this.getOrders.bind(this);
-
-  }
-
-  componentWillMount(){
-    fetch(process.env.REACT_APP_PROD_URL + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
-    .then((res) => res.json())
-    .then((strategies) => {
-        this.setState({strategies});
-        strategies.map((s) => {
-          this.getOrders(s.market);
-        })
-      }
-    );
   }
 
   // not a big fan of the way this is rendering right now... feels hacky
   // couldnt figure out how to return directly from the fetch.
   renderOrders(market){
-    if(market in this.state.orders){
+    if(market in this.props.orders){
       return (
         <div>
-          <p>{this.state.orders[market].short} Short</p>
-          <p>{this.state.orders[market].long} Long</p>
+          <p>{this.props.orders[market].short} Short</p>
+          <p>{this.props.orders[market].long} Long</p>
         </div>
       )
     }
   }
 
-  getOrders(market){
-    fetch(process.env.REACT_APP_PROD_URL + 'orders',{
-        body: JSON.stringify({market}),
-        headers: {
-          'Authorization': sessionStorage.getItem('bearer'),
-          'Content-Type': 'application/json'
-        },
-        method: 'POST'
-      })
-      .then((res => res.json()))
-      .then((orders) => {
-        console.log(orders);
-        const orderTally = orders.results.reduce((acc, o) => {
-          if(o.status === "open"){
-            if(o.fills.length > 0){
-              const fills = o.fills;
-              fills.map((fill) => {
-                acc[o.tokenType] += fill.tokenAmount;
-              })
-            }
-          }
-          return acc;
-        }, {short: 0, long: 0})
 
-        this.setState((prevState) => ({
-          ...prevState,
-          orders: {
-            ...prevState.orders,
-            [market]: orderTally
-          }
-        }))
-      })
-  }
 
   render(){
     return (
@@ -140,9 +91,9 @@ class strategyTable extends Component {
           </TableRow>
         </TableHead>
         <TableBody>
-          {this.state.strategies.length > 0
+          {this.props.strategies.length > 0
             ?
-            this.state.strategies.map(n => {
+            this.props.strategies.map(n => {
             return (
               <TableRow key={n.id} className={this.props.classes.row}>
                 <TableCell className={this.props.classes.cell} align="right">

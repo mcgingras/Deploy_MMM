@@ -55,7 +55,7 @@ a{
 }
 
 .button--add{
-  background-color: #78E7B9;
+  background-color: #36F2C5;
   border-radius: 5px;
   color: white;
   border: none;
@@ -110,7 +110,7 @@ a{
   opacity: .9;
 }
 
-.button-red{background-color: #C23400; }
+.button-red{background-color: #FF4500; }
 .button-purple{background-color: #4445EE; }
 .button-grey{background-color: #555555; }
 

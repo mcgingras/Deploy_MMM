@@ -3,7 +3,6 @@ const dotenv = require('dotenv').config();
 
 
 class VeilStrategy {
-  // fill this out.
   constructor(market){
     const m = process.env.MNEMONIC;
     const a = process.env.ADDRESS;
@@ -12,12 +11,7 @@ class VeilStrategy {
     this.market = market;
   }
 
-  async openOrders(market, target, spread, amount){
-    // make this the most basic order
-  };
-
-  // cancels orders
-  // could make market a part of veil strategy
+  // cancel orders same for any strategy type
   async cancelOrders(){
     try{
       const market = await this.veil.getMarket(this.market);
@@ -35,12 +29,12 @@ class VeilStrategy {
     }
   }
 
+  // get orders same for any strategy type
   async getOrders(){
     try{
       const market = await this.veil.getMarket(this.market);
       const orders = await this.veil.getUserOrders(market);
       const fills = await this.veil.getOrderFills(market, "short");
-      console.log(fills);
       return orders;
     } catch(e) {
       console.log("error " + e);
@@ -48,6 +42,8 @@ class VeilStrategy {
     }
   }
 }
+
+
 
 class SimpleBinaryStrategy extends VeilStrategy {
   constructor(market){
@@ -60,11 +56,15 @@ class SimpleBinaryStrategy extends VeilStrategy {
     const askPrice = target + halfSpread;
     const market = await this.veil.getMarket(this.market);
 
+    console.log(amount);
+    console.log(bidPrice);
+
     try {
-      const longQuote  = await this.veil.createQuote(market, "buy", "long", amount, bidPrice);
-      const shortQuote = await this.veil.createQuote(market, "buy", "short", amount, 1-askPrice);
+      // const longQuote  = await this.veil.createQuote(market, "buy", "long", amount, bidPrice);
+      const longQuote  = await this.veil.createQuote(market, "buy", "long", amount, target);
+      // const shortQuote = await this.veil.createQuote(market, "buy", "short", amount, 1-askPrice);
       const longOrder = await this.veil.createOrder(longQuote, { postOnly: true });
-      const shortOrder = await this.veil.createOrder(shortQuote, { postOnly: true });
+      // const shortOrder = await this.veil.createOrder(shortQuote, { postOnly: true });
       return "created successfully"
     } catch(e) {
       console.log(e);
@@ -72,6 +72,7 @@ class SimpleBinaryStrategy extends VeilStrategy {
     }
   }
 }
+
 
 
 class EMABinaryStrategy extends VeilStrategy {
@@ -84,11 +85,15 @@ class EMABinaryStrategy extends VeilStrategy {
   }
 }
 
+
+
 class LMBinaryStrategy extends VeilStrategy {
   constructor(market){
     super(market);
   }
 }
+
+
 
 module.exports = {
   VeilStrategy: VeilStrategy,
