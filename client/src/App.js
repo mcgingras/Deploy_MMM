@@ -6,7 +6,6 @@ import About from './components/about';
 import Header from './components/header';
 import StrategyTable from './components/strategyTable';
 import StrategyModal from './components/strategyModal';
-const dotenv = require('dotenv').config();
 
 class App extends Component {
   constructor(props){
@@ -20,7 +19,7 @@ class App extends Component {
       },
       strategies: [],
       orders: {},
-      errors: []
+      errors: {},
     }
 
     this.getOrders = this.getOrders.bind(this);
@@ -29,18 +28,19 @@ class App extends Component {
   componentDidMount(){
     if(sessionStorage.getItem('publicAddress')){
       this.setState({isAuth: true});
-    }
 
-    fetch(process.env.REACT_APP_PROD_URL + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
-    .then((res) => res.json())
-    .then((strategies) => {
-        console.log(strategies);
-        this.setState({strategies});
-        strategies.map((s) => {
-          this.getOrders(s.market);
-        })
-      }
-    );
+      fetch(process.env.REACT_APP_PROD_URL + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
+      .then((res) => res.json())
+      .then((strategies) => {
+          console.log(strategies);
+          this.setState({strategies});
+          strategies.map((s) => {
+            this.getOrders(s.market);
+            return s;
+          })
+        }
+      );
+    }
   }
 
   onAddStrategy = () => {
@@ -104,15 +104,21 @@ class App extends Component {
       },
       method: 'PUT'
     })
-    .then((res) => {
-      res.json();
-      this.setState({
-        isOpen: false
+    .then((res) => res.json())
+    .then((data) => {
+      this.state.strategies.map((s) => {
+        if(s._id === data._id){
+          const i = this.state.strategies.indexOf(s);
+          const updates = this.state.strategies.slice(0);
+          updates[i] = data;
+          this.setState({
+            isOpen: false,
+            strategies: updates,
+          })
+        }
+        return s;
       })
     });
-
-    // dont like doing it this way but
-    window.location.reload(true);
   }
 
 
@@ -135,9 +141,6 @@ class App extends Component {
     .then((res) => res.json())
     .then((data) => {
       this.state.strategies.map((s) => {
-        console.log(s._id);
-        console.log(data._id);
-        console.log(data);
         if(s._id === data._id){
           const i = this.state.strategies.indexOf(s);
           const updates = this.state.strategies.slice(0);
@@ -147,13 +150,60 @@ class App extends Component {
             strategies: updates,
           })
         }
+        return s;
       })
     });
+  }
+
+  validateForm = (name,value) => {
+    let error = "";
+    if(isNaN(parseFloat(value))){
+      error = "target must be a number"
+    }
+    switch (name) {
+      case "target":
+        if (value < 0 || value > 1){
+          error = "target must be between 0 and 1";
+        }
+          this.setState(prevState => ({
+            errors: {
+              ...prevState.errors,
+              target: error
+            }
+          }))
+        break;
+
+      case "spread":
+        if (value < 0 || value > 1){
+          error = "spread must be between 0 and 1";
+        }
+          this.setState(prevState => ({
+            errors: {
+              ...prevState.errors,
+              spread: error
+            }
+          }))
+        break;
+
+      case "amount":
+      // need to determine if we can get wallet balance easily
+          this.setState(prevState => ({
+            errors: {
+              ...prevState.errors,
+              amount: error
+            }
+          }))
+        break;
+
+      default:
+        break;
+    }
   }
 
 
   onInputChange = (e) => {
     const {name, value} = e.target;
+    this.validateForm(name,value);
     this.setState((prevState) => ({
       ...prevState,
       strategy: {
@@ -203,6 +253,7 @@ class App extends Component {
               const fills = o.fills;
               fills.map((fill) => {
                 acc[o.tokenType] += fill.tokenAmount;
+                return fill;
               })
             }
           }

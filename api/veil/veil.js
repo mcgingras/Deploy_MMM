@@ -60,11 +60,10 @@ class SimpleBinaryStrategy extends VeilStrategy {
     console.log(bidPrice);
 
     try {
-      // const longQuote  = await this.veil.createQuote(market, "buy", "long", amount, bidPrice);
-      const longQuote  = await this.veil.createQuote(market, "buy", "long", amount, target);
-      // const shortQuote = await this.veil.createQuote(market, "buy", "short", amount, 1-askPrice);
+      const longQuote  = await this.veil.createQuote(market, "buy", "long", amount, bidPrice);
+      const shortQuote = await this.veil.createQuote(market, "buy", "short", amount, 1-askPrice);
       const longOrder = await this.veil.createOrder(longQuote, { postOnly: true });
-      // const shortOrder = await this.veil.createOrder(shortQuote, { postOnly: true });
+      const shortOrder = await this.veil.createOrder(shortQuote, { postOnly: true });
       return "created successfully"
     } catch(e) {
       console.log(e);

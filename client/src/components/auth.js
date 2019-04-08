@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
-const dotenv = require('dotenv').config();
 
 class auth extends Component {
   constructor(props) {

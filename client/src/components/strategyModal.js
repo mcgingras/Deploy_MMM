@@ -3,6 +3,7 @@ import Modal from '@material-ui/core/Modal';
 import Tooltip from '@material-ui/core/Tooltip';
 import questionImg from '../img/question.svg';
 import Select from 'react-select';
+import Input from './input';
 
 const colourStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
@@ -81,14 +82,6 @@ class strategyModal extends Component {
             onSubmit={this.props.isEdit ? this.props.updateStrategy : this.props.submitStrategy}
             >
 
-            {this.props.errors.map((error) => {
-              return (
-                <div className="error">
-                  {error.message}
-                </div>
-              )
-            })}
-
             <label>
               Market
             </label>
@@ -101,41 +94,31 @@ class strategyModal extends Component {
               styles={colourStyles}
             />
 
-            <label>
-              Target
-              <Tooltip disableFocusListener disableTouchListener placement="right" title="The price you think the market should center around. Must be between 0-1.">
-                <img src={questionImg} alt="tooltip"/>
-              </Tooltip>
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Target"
               name="target"
-              onChange={this.props.onInputChange}
+              tooltip="The price you think the market should center around. Must be between 0-1."
               value={this.props.strategy.target}
+              onInputChange={this.props.onInputChange}
+              error={this.props.errors.target}
             />
 
-            <label>Spread
-            <Tooltip disableFocusListener disableTouchListener  placement="right" title="How much variation in price you are willing to offer.">
-              <img src={questionImg} alt="tooltip"/>
-            </Tooltip>
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Spread"
               name="spread"
-              onChange={this.props.onInputChange}
+              tooltip="How much variation in price you are willing to offer."
               value={this.props.strategy.spread}
+              onInputChange={this.props.onInputChange}
+              error={this.props.errors.spread}
             />
 
-            <label>Amount
-            <Tooltip disableFocusListener disableTouchListener placement="right" title="How much ETH you want to stake in this market.">
-              <img src={questionImg} alt="tooltip"/>
-            </Tooltip>
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Amount"
               name="amount"
-              onChange={this.props.onInputChange}
+              tooltip="How much ETH you want to stake in this market."
               value={this.props.strategy.amount}
+              onInputChange={this.props.onInputChange}
+              error={this.props.errors.amount}
             />
 
             <div className="container--button">

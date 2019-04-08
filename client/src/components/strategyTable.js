@@ -33,12 +33,13 @@ const styles = theme => ({
   table: {
     minWidth: 700,
     border: '1px solid #000',
-    borderRadius: '5px'
+    borderRadius: '5px',
+    fontFamily: 'Inter'
   },
   cell: {
     color: '#FFFFFF',
     borderBottom: '1px solid #343434',
-    fontSize: '18px',
+    fontSize: '16px',
     backgroundColor: '#19191C',
     // whiteSpace: 'nowrap',
     // overflow: 'hidden'
@@ -65,8 +66,8 @@ class strategyTable extends Component {
     if(market in this.props.orders){
       return (
         <div>
-          <p>{this.props.orders[market].short} Short</p>
-          <p>{this.props.orders[market].long} Long</p>
+          <p>{`${this.props.orders[market].short} short`}</p>
+          <p>{`${this.props.orders[market].long} long`}</p>
         </div>
       )
     }
@@ -106,7 +107,7 @@ class strategyTable extends Component {
                         <a
                           onClick={() => {window.open('https://kovan.veil.co/market/'+n.market)}}
                           className="market--link">
-                          View Market
+                          <span>View Market</span>
                           <img src={linkImg}/>
                         </a>
                       </div>
@@ -125,13 +126,13 @@ class strategyTable extends Component {
                         onClick={() => this.props.toggleStrategy(n, false)}
                         className="button button-red">
                         <img src={squareImg} alt="square"/>
-                        Stop
+                        <span>Stop</span>
                       </button>
                     : <button
                         onClick={() => this.props.toggleStrategy(n, true)}
                         className="button button-purple">
                         <img src={triangleImg} alt="square"/>
-                        Restart
+                        <span>Restart</span>
                       </button>
                   }
 
