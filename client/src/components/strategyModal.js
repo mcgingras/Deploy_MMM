@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Modal from '@material-ui/core/Modal';
 import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import questionImg from '../img/question.svg';
 import Select from 'react-select';
 import Input from './input';
@@ -81,7 +82,6 @@ class strategyModal extends Component {
             className="modal--strategy-form"
             onSubmit={this.props.isEdit ? this.props.updateStrategy : this.props.submitStrategy}
             >
-
             <label>
               Market
             </label>
@@ -121,13 +121,20 @@ class strategyModal extends Component {
               error={this.props.errors.amount}
             />
 
+            { this.props.isLoading ? <CircularProgress className="loader"/> :
+
             <div className="container--button">
               <button onClick={() => this.props.closeModal()} className="button button-red">Cancel</button>
               {this.props.isEdit
-               ? <button className="button button-purple">Update Strategy</button>
-               : <button className="button button-purple">Start Strategy</button>
+               ? <button className={Object.values(this.props.errors).filter((e) => {return e != ""}).length > 0 // this deadass the craziest filter
+                                    ? "button button-grey"
+                                    : "button button-purple"}>Update Strategy</button>
+               : <button className={Object.values(this.props.errors).filter((e) => {return e != ""}).length > 0 // this deadass the craziest filter
+                                    ? "button button-grey"
+                                    : "button button-purple"}>Start Strategy</button>
               }
             </div>
+          }
           </form>
           </div>
         </Modal>

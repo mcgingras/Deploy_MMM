@@ -37,7 +37,7 @@ exports.updateStrategy = async function(req, res) {
   if(!isAuth(req)){
     return res.send("Not Authorized");
   }
-  
+
   const { market, active } = req.body;
   const v = new SimpleBinaryStrategy(market);
   const response = await v.cancelOrders(market);
@@ -46,15 +46,20 @@ exports.updateStrategy = async function(req, res) {
     const t = parseFloat(req.body.target);
     const s = parseFloat(req.body.spread);
     const a = parseFloat(req.body.amount);
-    v.openOrders(t,s,a);
+    v.openOrders(t,s,a)
+    .then(r => {
+      if(r.errors){
+        return res.send({errors: r.errors[0]});
+      }
+      else{
+        Strategy.findOneAndUpdate({_id: req.params.strategyId}, req.body, {new:true}, function(err, strategy) {
+          if (err)
+            return res.send(err);
+          return res.json(strategy);
+        });
+      }
+    })
   }
-
-  Strategy.findOneAndUpdate({_id: req.params.strategyId}, req.body, {new:true}, function(err, strategy) {
-    if (err)
-      return res.send(err);
-    console.log(strategy);
-    return res.json(strategy);
-  });
 }
 
 exports.getStrategy = function(req, res) {

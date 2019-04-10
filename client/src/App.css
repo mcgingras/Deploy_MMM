@@ -247,3 +247,7 @@ img:last-child{
   height: 150px;
   line-height: 150px;
 }
+
+.loader{
+  margin: 10px auto; 
+}

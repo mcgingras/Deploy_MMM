@@ -15,6 +15,7 @@ class App extends Component {
       isAuth: false,
       isOpen: false,
       isEdit: false,
+      isLoading: false,
       strategy: {
       },
       strategies: [],
@@ -32,7 +33,6 @@ class App extends Component {
       fetch(process.env.REACT_APP_PROD_URL + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
       .then((res) => res.json())
       .then((strategies) => {
-          console.log(strategies);
           this.setState({strategies});
           strategies.map((s) => {
             this.getOrders(s.market);
@@ -49,8 +49,15 @@ class App extends Component {
 
   submitStrategy = (e) => {
     e.preventDefault();
+    
+    if(Object.values(this.state.errors).filter((e) => {return e != ""}).length > 0){
+      console.log("errors... fix them please");
+      return; // we have errors, dont submit.
+    }
+
     const payload = this.state.strategy;
     payload.publicAddress = sessionStorage.getItem('publicAddress');
+    this.setState({isLoading: true});
 
     // going to need JWT as well... should be protected
     fetch(process.env.REACT_APP_PROD_URL + 'strategy', {
@@ -64,12 +71,14 @@ class App extends Component {
     .then(res => res.json())
     .then((body) => {
       if (body.errors){
+        // TODO: take a look at these errors
         console.log(body.errors);
         this.setState({errors: body.errors})
       }
       else{
         this.setState(prevState => ({
           ...prevState,
+          isLoading: false,
           isOpen: false,
           strategies: [...prevState.strategies, body]
         }));
@@ -79,7 +88,7 @@ class App extends Component {
 
 
   closeModal = () => {
-    this.setState({isOpen: false, strategy: {}});
+    this.setState({isOpen: false, isLoading: false, strategy: {}});
   }
 
 
@@ -127,8 +136,13 @@ class App extends Component {
     e.preventDefault();
     const strategy = this.state.strategy;
     const id = strategy._id;
-    delete strategy._id;
-    delete strategy.__v;
+
+    if(Object.values(this.state.errors).filter((e) => {return e != ""}).length > 0){
+      console.log("errors... fix them please");
+      return; // we have errors, dont submit.
+    }
+
+    this.setState({isLoading: true});
 
     fetch(process.env.REACT_APP_PROD_URL + `strategy/${id}`, {
       body: JSON.stringify(strategy),
@@ -140,25 +154,34 @@ class App extends Component {
     })
     .then((res) => res.json())
     .then((data) => {
-      this.state.strategies.map((s) => {
-        if(s._id === data._id){
-          const i = this.state.strategies.indexOf(s);
-          const updates = this.state.strategies.slice(0);
-          updates[i] = data;
-          this.setState({
-            isOpen: false,
-            strategies: updates,
-          })
+      if(data.errors){
+        if(data.errors.message = "INSUFFICIENT_MAKER_BALANCE"){
+          this.validateForm("amount", true); // not really a fan of this way.
+          this.setState({isLoading: false});
         }
-        return s;
-      })
+      }
+      else{
+        this.state.strategies.map((s) => {
+          if(s._id === data._id){
+            const i = this.state.strategies.indexOf(s);
+            const updates = this.state.strategies.slice(0);
+            updates[i] = data;
+            this.setState({
+              isLoading: false,
+              isOpen: false,
+              strategies: updates,
+            })
+          }
+          return s;
+        })
+      }
     });
   }
 
   validateForm = (name,value) => {
     let error = "";
     if(isNaN(parseFloat(value))){
-      error = "target must be a number"
+      error = `${name} must be a number`
     }
     switch (name) {
       case "target":
@@ -186,7 +209,9 @@ class App extends Component {
         break;
 
       case "amount":
-      // need to determine if we can get wallet balance easily
+      if (value === true){
+        error = "insufficient funds"
+      }
           this.setState(prevState => ({
             errors: {
               ...prevState.errors,
@@ -202,6 +227,8 @@ class App extends Component {
 
 
   onInputChange = (e) => {
+    console.log(this.state.errors);
+    console.log(Object.values(this.state.errors).filter((e) => {return e != ""}).length > 0);
     const {name, value} = e.target;
     this.validateForm(name,value);
     this.setState((prevState) => ({
@@ -246,7 +273,6 @@ class App extends Component {
       })
       .then((res => res.json()))
       .then((orders) => {
-        console.log(orders);
         const orderTally = orders.results.reduce((acc, o) => {
           if(o.status === "open"){
             if(o.fills.length > 0){
@@ -289,6 +315,7 @@ class App extends Component {
 
           {this.state.isOpen &&
             <StrategyModal
+            isLoading={this.state.isLoading}
             isOpen={this.state.isOpen}
             isEdit={this.state.isEdit}
             strategy={this.state.strategy}

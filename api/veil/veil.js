@@ -49,16 +49,12 @@ class SimpleBinaryStrategy extends VeilStrategy {
   constructor(market){
     super(market);
   }
-
+  
   async openOrders(target, spread, amount){
     const halfSpread = spread / 2;
     const bidPrice = target - halfSpread;
     const askPrice = target + halfSpread;
     const market = await this.veil.getMarket(this.market);
-
-    console.log(amount);
-    console.log(bidPrice);
-
     try {
       const longQuote  = await this.veil.createQuote(market, "buy", "long", amount, bidPrice);
       const shortQuote = await this.veil.createQuote(market, "buy", "short", amount, 1-askPrice);
@@ -66,7 +62,6 @@ class SimpleBinaryStrategy extends VeilStrategy {
       const shortOrder = await this.veil.createOrder(shortQuote, { postOnly: true });
       return "created successfully"
     } catch(e) {
-      console.log(e);
       return e;
     }
   }

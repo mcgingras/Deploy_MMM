@@ -114,7 +114,7 @@ class strategyTable extends Component {
                       <p className="market--title">{n.name}</p>
                   </div>
                 </TableCell>
-                <TableCell className={this.props.classes.cell}>N/A</TableCell>
+                <TableCell className={this.props.classes.cell}>No Trades</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.target}%</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.spread}%</TableCell>
                 <CustomTableCell className={this.props.classes.cell}><span>{`${n.amount} ETH`}</span></CustomTableCell>
