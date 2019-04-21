@@ -28,7 +28,7 @@ class auth extends Component {
       return;
     }
 
-    fetch(process.env.REACT_APP_PROD_URL + "user/" + publicAddress)
+    fetch(window.location.href + "user/" + publicAddress)
     .then((res) => res.json())
     .then(user => user.length > 0 ? user[0] : this.handleSignup(publicAddress))
     .then(this.handleSignMessage)
@@ -37,7 +37,7 @@ class auth extends Component {
 
   handleSignup = (publicAddress) => {
     return(
-    fetch(process.env.REACT_APP_PROD_URL + "user/", {
+    fetch(window.location.href + "user/", {
       body: JSON.stringify({ publicAddress }),
       headers: {
         'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ class auth extends Component {
   }
 
   handleAuthenticate = ({ publicAddress, signature }) => {
-    fetch(process.env.REACT_APP_PROD_URL + "auth", {
+    fetch(window.location.href + "auth", {
       body: JSON.stringify({ publicAddress, signature }),
       headers: {
         'Content-Type': 'application/json'

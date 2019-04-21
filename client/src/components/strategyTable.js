@@ -57,17 +57,8 @@ class strategyTable extends Component {
     this.state = {
       web3: null,
       lastTrade: {},
-      positions: {},
     }
   }
-
-
-
-  loadPositions(){
-    console.log(this.props.positions);
-  }
-
-
 
   render(){
     return (
@@ -109,7 +100,7 @@ class strategyTable extends Component {
                       <p className="market--title">{n.name}</p>
                   </div>
                 </TableCell>
-                <TableCell onClick={() => {this.loadPositions()}} className={this.props.classes.cell}>No Trades</TableCell>
+                <TableCell className={this.props.classes.cell}>No Trades</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.target}%</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.spread}%</TableCell>
                 <CustomTableCell className={this.props.classes.cell}><span>{`${n.amount} ETH`}</span></CustomTableCell>

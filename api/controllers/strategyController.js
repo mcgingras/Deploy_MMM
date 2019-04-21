@@ -87,11 +87,5 @@ exports.getUserOrders = async function(req, res) {
   const { market } = req.body;
   const v = new VeilStrategy(market);
   const response = await v.getOrders(market);
-  response.results.map((orders) => {
-    // BigNumber(amount.toString()).times(TEN_18);
-    // getBalance(orders.token, (amt) => {
-    //   console.log(amt);
-    // })
-  })
   return res.json(response);
 }

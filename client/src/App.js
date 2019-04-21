@@ -32,7 +32,7 @@ class App extends Component {
     if(sessionStorage.getItem('publicAddress')){
       this.setState({isAuth: true});
 
-      fetch(process.env.REACT_APP_PROD_URL + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
+      fetch(window.location.href + `strategy/user/${sessionStorage.getItem('publicAddress')}`)
       .then((res) => res.json())
       .then((strategies) => {
           this.setState({strategies});
@@ -94,7 +94,7 @@ class App extends Component {
     this.setState({isLoading: true});
 
     // going to need JWT as well... should be protected
-    fetch(process.env.REACT_APP_PROD_URL + 'strategy', {
+    fetch(window.location.href + 'strategy', {
       body: JSON.stringify(payload),
       headers: {
         'Authorization': sessionStorage.getItem('bearer'),
@@ -136,7 +136,7 @@ class App extends Component {
 
   toggleStrategy = (strategy, toggle) => {
     const id = strategy._id;
-    fetch(process.env.REACT_APP_PROD_URL + `strategy/${id}`, {
+    fetch(window.location.href + `strategy/${id}`, {
       body: JSON.stringify({
         ...strategy,
         active: toggle
@@ -178,7 +178,7 @@ class App extends Component {
 
     this.setState({isLoading: true});
 
-    fetch(process.env.REACT_APP_PROD_URL + `strategy/${id}`, {
+    fetch(window.location.href + `strategy/${id}`, {
       body: JSON.stringify(strategy),
       headers: {
         'Authorization': sessionStorage.getItem('bearer'),
@@ -298,7 +298,7 @@ class App extends Component {
 
 
   getOrders(market){
-    fetch(process.env.REACT_APP_PROD_URL + 'orders',{
+    fetch(window.location.href + 'orders',{
         body: JSON.stringify({market}),
         headers: {
           'Authorization': sessionStorage.getItem('bearer'),
