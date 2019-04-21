@@ -4,6 +4,7 @@ const dotenv  = require('dotenv').config();
 const { isAuth } = require('../helpers/auth');
 const { VeilStrategy, SimpleBinaryStrategy } = require('../veil/veil');
 const Strategy = mongoose.model('Strategy');
+const { BigNumber } = require('@0x/utils');
 
 
 exports.createStrategy = function(req, res) {
@@ -86,5 +87,11 @@ exports.getUserOrders = async function(req, res) {
   const { market } = req.body;
   const v = new VeilStrategy(market);
   const response = await v.getOrders(market);
+  response.results.map((orders) => {
+    // BigNumber(amount.toString()).times(TEN_18);
+    // getBalance(orders.token, (amt) => {
+    //   console.log(amt);
+    // })
+  })
   return res.json(response);
 }

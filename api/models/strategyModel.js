@@ -37,6 +37,9 @@ var StrategySchema = new Schema({
     type: String,
     required: true,
   },
+  // could add short token contract and long token contract address to run getBalance on
+  // not really elegant to be doing this on the front end each time, web3 makes it a pain in the ass
+  // and we dont really need to be parsing entire order array just to get these addresses
   shortTokens: {
     type: Number,
     required: true,

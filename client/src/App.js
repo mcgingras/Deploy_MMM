@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import Web3 from 'web3';
 import Auth from './components/auth';
 import About from './components/about';
 import Header from './components/header';
@@ -19,7 +20,7 @@ class App extends Component {
       strategy: {
       },
       strategies: [],
-      orders: {},
+      positions: {},
       errors: {},
     }
 
@@ -27,6 +28,7 @@ class App extends Component {
   }
 
   componentDidMount(){
+    // n.amount
     if(sessionStorage.getItem('publicAddress')){
       this.setState({isAuth: true});
 
@@ -43,13 +45,45 @@ class App extends Component {
     }
   }
 
+  getBalance(address, fn){
+    const abi = [
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_owner",
+            "type": "address"
+          }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+          {
+            "name": "balance",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+    ];
+
+    const web3 = window.web3 ?
+    new Web3(window.web3.currentProvider) :
+    new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/"));
+
+    var tokenContract = web3.eth.contract(abi).at(address);
+    return tokenContract.balanceOf.call(sessionStorage.getItem('publicAddress'), (err,res) => {
+      fn(res.toNumber()*10000/(10**18));
+    });
+  }
+
   onAddStrategy = () => {
     this.setState({isOpen: true, isEdit: false});
   }
 
   submitStrategy = (e) => {
     e.preventDefault();
-    
+
     if(Object.values(this.state.errors).filter((e) => {return e != ""}).length > 0){
       console.log("errors... fix them please");
       return; // we have errors, dont submit.
@@ -262,6 +296,7 @@ class App extends Component {
     });
   }
 
+
   getOrders(market){
     fetch(process.env.REACT_APP_PROD_URL + 'orders',{
         body: JSON.stringify({market}),
@@ -273,26 +308,38 @@ class App extends Component {
       })
       .then((res => res.json()))
       .then((orders) => {
-        const orderTally = orders.results.reduce((acc, o) => {
-          if(o.status === "open"){
-            if(o.fills.length > 0){
-              const fills = o.fills;
-              fills.map((fill) => {
-                acc[o.tokenType] += fill.tokenAmount;
-                return fill;
-              })
-            }
+        const adr = {};
+        orders.results.map((o) => {
+          if(!(o.token in Object.values(adr))){
+            adr[o.tokenType] = o.token;
           }
-          return acc;
-        }, {short: 0, long: 0})
+        })
 
-        this.setState((prevState) => ({
-          ...prevState,
-          orders: {
-            ...prevState.orders,
-            [market]: orderTally
-          }
-        }))
+        this.getBalance(adr['short'], (s) => {
+          this.setState((prevState) => ({
+            ...prevState,
+            positions: {
+              ...prevState.positions,
+              [market]: {
+                ...prevState.positions[market],
+                short: s.toFixed(2)
+              }
+            }
+          }))
+        })
+
+        this.getBalance(adr['long'], (s) => {
+          this.setState((prevState) => ({
+            ...prevState,
+            positions: {
+              ...prevState.positions,
+              [market]: {
+                ...prevState.positions[market],
+                long: s.toFixed(2)
+              }
+            }
+          }))
+        })
       })
   }
 
@@ -310,7 +357,7 @@ class App extends Component {
             editStrategy={this.editStrategy}
             toggleStrategy={this.toggleStrategy}
             strategies={this.state.strategies}
-            orders={this.state.orders}
+            positions={this.state.positions}
            />
 
           {this.state.isOpen &&

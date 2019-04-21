@@ -56,21 +56,15 @@ class strategyTable extends Component {
 
     this.state = {
       web3: null,
-      lastTrade: {}
+      lastTrade: {},
+      positions: {},
     }
   }
 
-  // not a big fan of the way this is rendering right now... feels hacky
-  // couldnt figure out how to return directly from the fetch.
-  renderOrders(market){
-    if(market in this.props.orders){
-      return (
-        <div>
-          <p>{`${this.props.orders[market].short} short`}</p>
-          <p>{`${this.props.orders[market].long} long`}</p>
-        </div>
-      )
-    }
+
+
+  loadPositions(){
+    console.log(this.props.positions);
   }
 
 
@@ -95,6 +89,7 @@ class strategyTable extends Component {
           {this.props.strategies.length > 0
             ?
             this.props.strategies.map(n => {
+              console.log(n);
             return (
               <TableRow key={n.id} className={this.props.classes.row}>
                 <TableCell className={this.props.classes.cell} align="right">
@@ -114,11 +109,14 @@ class strategyTable extends Component {
                       <p className="market--title">{n.name}</p>
                   </div>
                 </TableCell>
-                <TableCell className={this.props.classes.cell}>No Trades</TableCell>
+                <TableCell onClick={() => {this.loadPositions()}} className={this.props.classes.cell}>No Trades</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.target}%</TableCell>
                 <TableCell className={this.props.classes.cell}>{n.spread}%</TableCell>
                 <CustomTableCell className={this.props.classes.cell}><span>{`${n.amount} ETH`}</span></CustomTableCell>
-                <TableCell className={this.props.classes.cell}>{this.renderOrders(n.market)}</TableCell>
+                <TableCell className={this.props.classes.cell}>
+                  {this.props.positions[n.market] ? this.props.positions[n.market]['short'] + " Short" : 0 + " Short"} <br/>
+                  {this.props.positions[n.market] ? this.props.positions[n.market]['long'] + " Long" : 0 + " Long"}
+                </TableCell>
                 <CustomTableCell className={this.props.classes.cell}>
                   <button onClick={() => this.props.editStrategy(n)} className="button button-grey">Edit</button>
                   {n.active
