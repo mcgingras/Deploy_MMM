@@ -13,4 +13,7 @@ module.exports = function(app) {
   app.route('/auth')
     .post(user.auth);
 
+  app.route('/veil')
+    .get(user.getVeil)
+
 };

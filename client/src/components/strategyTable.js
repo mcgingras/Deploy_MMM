@@ -61,14 +61,6 @@ class strategyTable extends Component {
     }
   }
 
-
-
-  loadPositions(){
-    console.log(this.props.positions);
-  }
-
-
-
   render(){
     return (
       <div className={this.props.classes.root}>
@@ -89,7 +81,6 @@ class strategyTable extends Component {
           {this.props.strategies.length > 0
             ?
             this.props.strategies.map(n => {
-              console.log(n);
             return (
               <TableRow key={n.id} className={this.props.classes.row}>
                 <TableCell className={this.props.classes.cell} align="right">

@@ -71,10 +71,15 @@ class auth extends Component {
       method: 'POST'
     })
   .then(response => response.json())
-  .then(token => {
-    sessionStorage.setItem("bearer", token);
-    sessionStorage.setItem("publicAddress", publicAddress);
-    this.props.login();
+  .then(payload => {
+    if(payload == "failed"){
+      this.setState({errors: [{message: "Your address is not authenticated to this instance of MMM."}]});
+    }
+    else{
+      sessionStorage.setItem("bearer", payload);
+      sessionStorage.setItem("publicAddress", publicAddress);
+      this.props.login();
+    }
     });
   }
 
@@ -83,7 +88,7 @@ class auth extends Component {
       <div className="container--auth">
         {this.state.errors.map((error) => {
           return (
-            <div>
+            <div className="error">
               {error.message}
             </div>
           )

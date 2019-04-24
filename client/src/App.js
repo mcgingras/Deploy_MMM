@@ -22,6 +22,7 @@ class App extends Component {
       strategies: [],
       positions: {},
       errors: {},
+      api: "https://api.kovan.veil.co"
     }
 
     this.getOrders = this.getOrders.bind(this);
@@ -29,6 +30,14 @@ class App extends Component {
 
   componentDidMount(){
     // n.amount
+
+    fetch(process.env.REACT_APP_PROD_URL + "veil")
+    .then((res) => res.json())
+    .then(api => {
+      api = api.substring(0, api.length - 2);
+      this.setState({api});
+    });
+
     if(sessionStorage.getItem('publicAddress')){
       this.setState({isAuth: true});
 
@@ -43,38 +52,6 @@ class App extends Component {
         }
       );
     }
-  }
-
-  getBalance(address, fn){
-    const abi = [
-      {
-        "constant": true,
-        "inputs": [
-          {
-            "name": "_owner",
-            "type": "address"
-          }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-          {
-            "name": "balance",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-    ];
-
-    const web3 = window.web3 ?
-    new Web3(window.web3.currentProvider) :
-    new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/"));
-
-    var tokenContract = web3.eth.contract(abi).at(address);
-    return tokenContract.balanceOf.call(sessionStorage.getItem('publicAddress'), (err,res) => {
-      fn(res.toNumber()*10000/(10**18));
-    });
   }
 
   onAddStrategy = () => {
@@ -149,6 +126,7 @@ class App extends Component {
     })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data);
       this.state.strategies.map((s) => {
         if(s._id === data._id){
           const i = this.state.strategies.indexOf(s);
@@ -280,7 +258,7 @@ class App extends Component {
   onMarketChange = (market) => {
     const { value } = market;
     // need to get market for additional data (like channel and name type)
-    fetch(`https://api.kovan.veil.market/api/v1/markets/${value}`)
+    fetch(`${this.state.api}market/api/v1/markets/${value}`)
     .then((res) => { return res.json() })
     .then((data) => {
       const { name, channel } = data.data;

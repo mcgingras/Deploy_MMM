@@ -30,25 +30,33 @@ class strategyModal extends Component {
       markets: [],
       isOpen: true,
       options: [],
-      selectedOption: ""
+      selectedOption: "",
+      api: ""
     }
 
     this.onInputChange = this.onInputChange.bind(this);
   }
 
   componentWillMount(){
-    fetch('https://api.kovan.veil.market/api/v1/markets')
-    .then((res) => { return res.json() })
-    .then((data) => {
-      const markets = data.data.results;
-      const options = markets.reduce((acc, market) => {
-        if(market.type === "yesno"){
-          acc.push({label: market.name, value: market.slug, isDisabled: false});
-        }
-        return acc;
-      }, []);
-       this.setState({ options, markets })
-    })
+    fetch(process.env.REACT_APP_PROD_URL + "veil")
+    .then((res) => res.json())
+    .then(r => {
+      const api = r.substring(0, r.length - 2);
+      fetch(`${api}market/api/v1/markets`)
+      .then((res) => { return res.json() })
+      .then((data) => {
+        const markets = data.data.results;
+        const options = markets.reduce((acc, market) => {
+          if(market.type === "yesno"){
+            acc.push({label: market.name, value: market.slug, isDisabled: false});
+          }
+          return acc;
+        }, []);
+         this.setState({ options, markets })
+      })
+    });
+
+
   }
 
   // insanely cumbersome function needed to get value because react select

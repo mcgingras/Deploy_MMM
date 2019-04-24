@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const dotenv  = require('dotenv').config();
 const { isAuth } = require('../helpers/auth');
-const { VeilStrategy, SimpleBinaryStrategy } = require('../veil/veil');
+const { VeilStrategy, SimpleBinaryStrategy, EMABinaryStrategy } = require('../veil/veil');
 const Strategy = mongoose.model('Strategy');
 const { BigNumber } = require('@0x/utils');
 
@@ -14,8 +14,6 @@ exports.createStrategy = function(req, res) {
 
   const { market } = req.body;
   const s = new SimpleBinaryStrategy(market);
-
-  // do we require target to be between 0 and 1?
 
   const target = parseFloat(req.body.target);
   const spread = parseFloat(req.body.spread);
@@ -52,15 +50,15 @@ exports.updateStrategy = async function(req, res) {
       if(r.errors){
         return res.send({errors: r.errors[0]});
       }
-      else{
-        Strategy.findOneAndUpdate({_id: req.params.strategyId}, req.body, {new:true}, function(err, strategy) {
-          if (err)
-            return res.send(err);
-          return res.json(strategy);
-        });
-      }
     })
   }
+
+  Strategy.findOneAndUpdate({_id: req.params.strategyId}, req.body, {new:true}, function(err, strategy) {
+    if (err)
+      return res.send(err);
+    return res.json(strategy);
+  });
+
 }
 
 exports.getStrategy = function(req, res) {
@@ -78,6 +76,13 @@ exports.getUserStrategies = function(req, res) {
     return res.json(strategy);
   });
 };
+
+exports.getDataFeed = async function(req, res) {
+  const { market } = req.body;
+  const v = new EMABinaryStrategy(market);
+  const response = await v.getFeed();
+  return res.json(response);
+}
 
 exports.getUserOrders = async function(req, res) {
   // if(!isAuth(req)){

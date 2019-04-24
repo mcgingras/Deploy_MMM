@@ -15,4 +15,7 @@ module.exports = function(app) {
   app.route('/orders/')
     .post(strategy.getUserOrders);
 
+  app.route('/feed/')
+    .post(strategy.getDataFeed);
+
 };
